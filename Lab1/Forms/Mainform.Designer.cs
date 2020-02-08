@@ -1,6 +1,9 @@
-﻿namespace Lab1
+﻿using Lab1.Figures;
+using System.Linq;
+
+namespace Lab1.Forms
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         /// Обязательная переменная конструктора.
@@ -28,6 +31,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.ResultLbl = new System.Windows.Forms.Label();
             this.FindTangentBtn = new System.Windows.Forms.Button();
             this.CircleXUpdn = new System.Windows.Forms.NumericUpDown();
@@ -54,6 +58,11 @@
             this.Circle2XUpdn = new System.Windows.Forms.NumericUpDown();
             this.GetCommonTangentsBtn = new System.Windows.Forms.Button();
             this.TangentsLV = new System.Windows.Forms.ListView();
+            this.PerformBtn = new System.Windows.Forms.Button();
+            this.TangentTypeCmb = new System.Windows.Forms.ComboBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.settingsBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.commonTangentTypesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.CircleXUpdn)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CircleYUpdn)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PointYUpdn)).BeginInit();
@@ -64,6 +73,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.Circle2RadiusUpdn)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Circle2YUpdn)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Circle2XUpdn)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.settingsBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.commonTangentTypesBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // ResultLbl
@@ -108,7 +119,7 @@
             this.CircleXUpdn.Size = new System.Drawing.Size(120, 22);
             this.CircleXUpdn.TabIndex = 2;
             this.CircleXUpdn.Value = new decimal(new int[] {
-            1,
+            45,
             0,
             0,
             0});
@@ -136,7 +147,7 @@
             this.CircleYUpdn.Size = new System.Drawing.Size(120, 22);
             this.CircleYUpdn.TabIndex = 7;
             this.CircleYUpdn.Value = new decimal(new int[] {
-            1,
+            45,
             0,
             0,
             0});
@@ -220,7 +231,7 @@
             this.CircleRadiusUpdn.Size = new System.Drawing.Size(120, 22);
             this.CircleRadiusUpdn.TabIndex = 10;
             this.CircleRadiusUpdn.Value = new decimal(new int[] {
-            3,
+            135,
             0,
             0,
             0});
@@ -413,7 +424,7 @@
             this.Circle2RadiusUpdn.Size = new System.Drawing.Size(120, 22);
             this.Circle2RadiusUpdn.TabIndex = 24;
             this.Circle2RadiusUpdn.Value = new decimal(new int[] {
-            1,
+            45,
             0,
             0,
             0});
@@ -441,7 +452,7 @@
             this.Circle2YUpdn.Size = new System.Drawing.Size(120, 22);
             this.Circle2YUpdn.TabIndex = 23;
             this.Circle2YUpdn.Value = new decimal(new int[] {
-            3,
+            135,
             0,
             0,
             0});
@@ -456,12 +467,12 @@
             196608});
             this.Circle2XUpdn.Location = new System.Drawing.Point(473, 48);
             this.Circle2XUpdn.Maximum = new decimal(new int[] {
-            200,
+            300,
             0,
             0,
             0});
             this.Circle2XUpdn.Minimum = new decimal(new int[] {
-            200,
+            300,
             0,
             0,
             -2147483648});
@@ -469,7 +480,7 @@
             this.Circle2XUpdn.Size = new System.Drawing.Size(120, 22);
             this.Circle2XUpdn.TabIndex = 22;
             this.Circle2XUpdn.Value = new decimal(new int[] {
-            5,
+            225,
             0,
             0,
             -2147483648});
@@ -486,6 +497,8 @@
             // 
             // TangentsLV
             // 
+            this.TangentsLV.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.TangentsLV.Location = new System.Drawing.Point(473, 202);
             this.TangentsLV.Name = "TangentsLV";
             this.TangentsLV.Size = new System.Drawing.Size(548, 234);
@@ -493,11 +506,54 @@
             this.TangentsLV.UseCompatibleStateImageBehavior = false;
             this.TangentsLV.View = System.Windows.Forms.View.List;
             // 
-            // Form1
+            // PerformBtn
+            // 
+            this.PerformBtn.Location = new System.Drawing.Point(910, 140);
+            this.PerformBtn.Name = "PerformBtn";
+            this.PerformBtn.Size = new System.Drawing.Size(75, 30);
+            this.PerformBtn.TabIndex = 30;
+            this.PerformBtn.Text = "Perform";
+            this.PerformBtn.UseVisualStyleBackColor = true;
+            this.PerformBtn.Click += new System.EventHandler(this.PerformBtn_Click);
+            // 
+            // TangentTypeCmb
+            // 
+            this.TangentTypeCmb.FormattingEnabled = true;
+            this.TangentTypeCmb.Items.AddRange(new object[] {
+            "Both",
+            "Inner",
+            "Outer"});
+            this.TangentTypeCmb.Location = new System.Drawing.Point(862, 48);
+            this.TangentTypeCmb.Name = "TangentTypeCmb";
+            this.TangentTypeCmb.Size = new System.Drawing.Size(121, 24);
+            this.TangentTypeCmb.TabIndex = 31;
+            this.TangentTypeCmb.SelectedValue = "Both";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(862, 13);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(92, 17);
+            this.label12.TabIndex = 32;
+            this.label12.Text = "Tangent type";
+            // 
+            // settingsBindingSource
+            // 
+            this.settingsBindingSource.DataSource = typeof(Lab1.Config.Settings);
+            // 
+            // commonTangentTypesBindingSource
+            // 
+            this.commonTangentTypesBindingSource.DataSource = typeof(Lab1.Figures.Circle.CommonTangentTypes);
+            // 
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1033, 462);
+            this.Controls.Add(this.label12);
+            this.Controls.Add(this.TangentTypeCmb);
+            this.Controls.Add(this.PerformBtn);
             this.Controls.Add(this.TangentsLV);
             this.Controls.Add(this.GetCommonTangentsBtn);
             this.Controls.Add(this.label9);
@@ -524,7 +580,7 @@
             this.Controls.Add(this.CircleXUpdn);
             this.Controls.Add(this.FindTangentBtn);
             this.Controls.Add(this.ResultLbl);
-            this.Name = "Form1";
+            this.Name = "MainForm";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.CircleXUpdn)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.CircleYUpdn)).EndInit();
@@ -536,6 +592,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.Circle2RadiusUpdn)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Circle2YUpdn)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Circle2XUpdn)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.settingsBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.commonTangentTypesBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -569,6 +627,11 @@
         private System.Windows.Forms.NumericUpDown Circle2XUpdn;
         private System.Windows.Forms.Button GetCommonTangentsBtn;
         private System.Windows.Forms.ListView TangentsLV;
+        private System.Windows.Forms.Button PerformBtn;
+        private System.Windows.Forms.ComboBox TangentTypeCmb;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.BindingSource settingsBindingSource;
+        private System.Windows.Forms.BindingSource commonTangentTypesBindingSource;
     }
 }
 

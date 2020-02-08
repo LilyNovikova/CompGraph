@@ -1,14 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Lab1.Config.Settings;
+using System.Windows.Forms;
+using static Lab1.Const.CalculationConst;
 
 namespace Lab1.Figures
 {
     public class Circle : Figure
     {
+        public enum TangentTypes
+        {
+            NotATangent,
+            Lower,
+            Upper
+        }
+
+        public enum CommonTangentTypes
+        {
+            NotATangent,
+            Inner,
+            Outer
+        }
+
         public double CenterX { get; private set; }
         public double CenterY { get; private set; }
         public double Radius { get; private set; }
@@ -39,8 +55,13 @@ namespace Lab1.Figures
             return values;
         }
 
-        public bool IsCirclePoint(Point p)
+        public bool IsCirclePoint(Point p, double tolerance = 0)
         {
+
+            if (tolerance == 0)
+            {
+                tolerance = Tolerance;
+            }
             try
             {
                 if (p == null)
@@ -48,8 +69,8 @@ namespace Lab1.Figures
                     return false;
                 }
                 var values = GetValues(p.X);
-                return Math.Abs(values[0] - p.Y) < Tolerance
-                    || Math.Abs(values[1] - p.Y) < Tolerance;
+                return Math.Abs(values[0] - p.Y) < tolerance
+                    || Math.Abs(values[1] - p.Y) < tolerance;
             }
             catch (ArgumentException)
             {
@@ -57,9 +78,13 @@ namespace Lab1.Figures
             }
         }
 
-        public Line GetTangent(Point p)
+        public Line GetTangent(Point p, double tolerance = 0)
         {
-            if (!IsCirclePoint(p))
+            if (tolerance == 0)
+            {
+                tolerance = Tolerance;
+            }
+            if (!IsCirclePoint(p, tolerance))
             {
                 return null;
                 // throw new ArgumentException($"Point {p} doesn't belong the circle");
@@ -78,17 +103,26 @@ namespace Lab1.Figures
             return lines;
         }
 
-        public bool IsTangent(Line line, out Point p)
+        public bool IsTangent(Line line, out Point p, double tolerance = 0)
         {
+            if (tolerance == 0)
+            {
+                tolerance = Tolerance;
+            }
             p = FindPoint(
-                (point) => GetTangent(point).Equals(line)
+                (point) => GetTangent(point).Equals(line),
+                tolerance
                 );
             return p != null;
         }
 
-        public Point FindPoint(Func<Point, bool> condition)
+        public Point FindPoint(Func<Point, bool> condition, double tolerance = 0)
         {
-            for (double x = -Radius + CenterX; x <= Radius + CenterX; x += Tolerance)
+            if (tolerance == 0)
+            {
+                tolerance = Tolerance;
+            }
+            for (double x = -Radius + CenterX; x <= Radius + CenterX; x += tolerance)
             {
                 var values = GetValues(x);
                 var p0 = new Point(x, values[0]);
@@ -113,15 +147,11 @@ namespace Lab1.Figures
                 var values = GetValues(x);
                 var p0 = new Point(x, values[0]);
                 var p1 = new Point(x, values[1]);
-                if (Math.Abs(x + 5) < Tolerance)
-                {
-                    ;
-                }
                 if (condition(p0))
                 {
                     list.Add(p0);
                 }
-                else if (condition(p1))
+                if ((p0 != p1) && condition(p1))
                 {
                     list.Add(p1);
                 }
@@ -151,8 +181,16 @@ namespace Lab1.Figures
                 var tangents = new List<Line>();
                 foreach (Point p in points)
                 {
-                    var c = (Radius < circle.Radius) ? this : circle;
-                    tangents.Add(c.GetTangent(p));
+                    var c1 = (Radius < circle.Radius) ? this : circle;
+                    var c2 = (Radius < circle.Radius) ? circle : this;
+                    var tan = c1.GetTangent(p);
+                    Point p1;
+                    Tolerance /= 15;
+                    if (c2.IsTangent(tan, out p1))
+                    {
+                        tangents.Add(tan);
+                    }
+                    Tolerance *= 15;
                 }
                 return tangents;
             }
@@ -162,9 +200,74 @@ namespace Lab1.Figures
             }
         }
 
-        public override void Draw()
+        public override void Draw(Graphics g, Control control, Color color)
         {
-            throw new NotImplementedException();
+            var brush = new SolidBrush(color);
+            var pen = new Pen(brush);
+            var h = control.Height;
+            var w = control.Width;
+            var rect = new Rectangle(
+               (int)Math.Round(CenterX - Radius + w / 2),
+               (int)Math.Round(CenterY - Radius + h / 2),
+               (int)Math.Round(2 * Radius),
+               (int)Math.Round(2 * Radius)
+                );
+            g.DrawEllipse(pen, rect);
+        }
+
+        public TangentTypes GetTangentType(Line line)
+        {
+            Point p;
+            if (!IsTangent(line, out p))
+            {
+                return TangentTypes.NotATangent;
+            }
+            var values0 = GetValues(p.X);
+            if (Math.Abs(p.Y - Math.Max(values0[0], values0[1])) < Tolerance)
+            {
+                return TangentTypes.Upper;
+            }
+            else if (Math.Abs(p.Y - Math.Min(values0[0], values0[1])) < Tolerance)
+            {
+                return TangentTypes.Lower;
+            }
+            else
+            {
+                return TangentTypes.NotATangent;
+            }
+            /*var p0 = new Point(p.X - Tolerance, line.GetValue(p.X - Tolerance));
+            var p1 = new Point(p.X + Tolerance, line.GetValue(p.X + Tolerance));
+            var values0 = GetValues(p0.X);
+            var values1 = GetValues(p1.X);
+            if ((p0.Y > values0[0] && p0.Y > values0[1]) && (p1.Y > values1[0] && p1.Y > values1[1]))
+            {
+                return TangentTypes.Upper;
+            }
+            else if ((p0.Y < values0[0] && p0.Y < values0[1]) && (p1.Y < values1[0] && p1.Y < values1[1]))
+            {
+                return TangentTypes.Lower;
+            }
+            else
+            {
+                return TangentTypes.NotATangent;
+            }*/
+        }
+
+        public CommonTangentTypes GetCommonTangentType(Line line, Circle circle)
+        {
+            var type0 = GetTangentType(line);
+            var type1 = circle.GetTangentType(line);
+            if ((type0 == TangentTypes.Lower && type1 == TangentTypes.Upper)
+                || (type0 == TangentTypes.Upper && type1 == TangentTypes.Lower))
+            {
+                return CommonTangentTypes.Inner;
+            }
+            else if ((type0 == TangentTypes.Upper && type1 == TangentTypes.Upper)
+                || (type0 == TangentTypes.Lower && type1 == TangentTypes.Lower))
+            {
+                return CommonTangentTypes.Outer;
+            }
+            return CommonTangentTypes.NotATangent;
         }
     }
 }

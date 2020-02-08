@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Lab1.Config.Settings;
+using System.Windows.Forms;
+using static Lab1.Const.CalculationConst;
+using PointD = System.Drawing.Point;
 
 namespace Lab1.Figures
 {
@@ -21,11 +24,6 @@ namespace Lab1.Figures
         public double GetValue(double x)
         {
             return K * x + B;
-        }
-
-        public override void Draw()
-        {
-            throw new NotImplementedException();
         }
 
         public override string ToString()
@@ -50,6 +48,17 @@ namespace Lab1.Figures
             }
             return Math.Abs(line.K - K) < Tolerance
                 && Math.Abs(line.B - B) < Tolerance;
+        }
+
+        public override void Draw(Graphics g, Control control, Color color)
+        {
+            var brush = new SolidBrush(color);
+            var pen = new Pen(brush);
+            var h = control.Height;
+            var w = control.Width;
+            var p1 = new PointD(0, (int)Math.Round(GetValue(0 - w / 2)) + h / 2);
+            var p2 = new PointD(w, (int)Math.Round(GetValue(w / 2)) + h / 2);
+            g.DrawLine(pen, p1, p2);
         }
     }
 }

@@ -9,6 +9,6 @@ namespace Lab1.Config
    public class Settings
     {
         private static JsonFile calcConfig = new JsonFile("Resources\\CalculationConfig.json");
-        public static double Tolerance = 0.1;// calcConfig.GetValue<double>(".tolerance");
+        public static double Tolerance = calcConfig.GetValue<double>(".tolerance");
     }
 }

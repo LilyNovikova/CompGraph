@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Lab1.Config;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace Lab1.Const
 {
   public  class CalculationConst
     {
-
+        public static double Tolerance { get; set; } = Settings.Tolerance;
     }
 }
