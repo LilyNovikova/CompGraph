@@ -54,7 +54,7 @@ namespace Lab1
             //check if circles are intersecting
             if (ABLength > aR + bR)
             {
-                label7.Text = "";
+                WarningLbl.Text = "";
                 var alpha = Math.PI / 2 - Math.Asin(aR / AOLength);
 
                 var aX1 = aX + Convert.ToInt32((oX - aX) * (aR / AOLength));
@@ -77,7 +77,7 @@ namespace Lab1
             }
             else
             {
-                label7.Text = "Circles are intersecting.\nPlease, change radiuses or the distance between the centers.";
+                WarningLbl.Text = "Circles are intersecting.\nPlease, change radiuses or the distance between the centers.";
             }
         }
 

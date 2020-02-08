@@ -43,7 +43,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.FlipSideBtn = new System.Windows.Forms.Button();
             this.SideLbl = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
+            this.WarningLbl = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pointAXUpdn)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pointAYUpdn)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radiusAUpdn)).BeginInit();
@@ -251,17 +251,17 @@
             // 
             // label7
             // 
-            this.label7.Location = new System.Drawing.Point(499, 45);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(237, 59);
-            this.label7.TabIndex = 18;
+            this.WarningLbl.Location = new System.Drawing.Point(499, 45);
+            this.WarningLbl.Name = "label7";
+            this.WarningLbl.Size = new System.Drawing.Size(237, 59);
+            this.WarningLbl.TabIndex = 18;
             // 
             // DrawForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(796, 738);
-            this.Controls.Add(this.label7);
+            this.Controls.Add(this.WarningLbl);
             this.Controls.Add(this.SideLbl);
             this.Controls.Add(this.FlipSideBtn);
             this.Controls.Add(this.label5);
@@ -308,7 +308,7 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button FlipSideBtn;
         private System.Windows.Forms.Label SideLbl;
-        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label WarningLbl;
     }
 }
 
