@@ -49,6 +49,7 @@ namespace Lab1
             var oY = aY + (bY - aY) * aR / (aR + bR);
 
             var AOLength = Math.Sqrt((oY - aY) * (oY - aY) + (oX - aX) * (oX - aX));
+            var OBLength = Math.Sqrt((oY - bY) * (oY - bY) + (oX - bX) * (oX - bX));
             var ABLength = Math.Sqrt((bY - aY) * (bY - aY) + (bX - aX) * (bX - aX));
 
             //check if circles are intersecting
@@ -59,8 +60,8 @@ namespace Lab1
 
                 var aX1 = aX + Convert.ToInt32((oX - aX) * (aR / AOLength));
                 var aY1 = aY + Convert.ToInt32((oY - aY) * (aR / AOLength));
-                var bX1 = bX + Convert.ToInt32((oX - bX) * (bR / AOLength));
-                var bY1 = bY + Convert.ToInt32((oY - bY) * (bR / AOLength));
+                var bX1 = bX + Convert.ToInt32((oX - bX) * (bR / OBLength));
+                var bY1 = bY + Convert.ToInt32((oY - bY) * (bR / OBLength));
 
                 if (side == false)
                 {
