@@ -31,8 +31,8 @@ namespace Lab1.Models
             var pointO = GetTangentsIntersectionPoint(circleB);
             var alpha = Math.PI / 2 - Math.Asin(Radius / Center.GetDistanсe(pointO));
             alpha = side ? -1 * alpha : alpha;
-            var pointA1 = GetClosestToCirclePoint(this, pointO);
-            var pointB1 = GetClosestToCirclePoint(circleB, pointO);
+            var pointA1 = GetClosestPointToPoint(pointO);
+            var pointB1 = circleB.GetClosestPointToPoint(pointO);
 
             return new Section(
                 PivotPointAroundPoint(-alpha, Center, pointA1), 
@@ -42,9 +42,10 @@ namespace Lab1.Models
 
         private Point GetTangentsIntersectionPoint(Circle circle)
         {
-            var oX = Center.X + (circle.Center.X - Center.X) * Radius / (Radius + circle.Radius);
-            var oY = Center.Y + (circle.Center.Y - Center.Y) * Radius / (Radius + circle.Radius);
-            return new Point(oX, oY);
+            return new Point(
+                Center.X + (circle.Center.X - Center.X) * Radius / (Radius + circle.Radius),
+                Center.Y + (circle.Center.Y - Center.Y) * Radius / (Radius + circle.Radius)
+                );
         }
 
         private Point PivotPointAroundPoint(double alpha, Point center, Point point)
@@ -55,13 +56,12 @@ namespace Lab1.Models
             );
         }
 
-        private Point GetClosestToCirclePoint(Circle circle, Point o)
+        private Point GetClosestPointToPoint(Point o)
         {
-            var a = circle.Center;
-            var length = a.GetDistanсe(o);
-            var aX1 = a.X + Convert.ToInt32((o.X - a.X) * (circle.Radius / length));
-            var aY1 = a.Y + Convert.ToInt32((o.Y - a.Y) * (circle.Radius / length));
-            return new Point(aX1, aY1);
+            var length = Center.GetDistanсe(o);
+            var x = Center.X + Convert.ToInt32((o.X - Center.X) * (Radius / length));
+            var y = Center.Y + Convert.ToInt32((o.Y - Center.Y) * (Radius / length));
+            return new Point(x, y);
         }
     }
 }
