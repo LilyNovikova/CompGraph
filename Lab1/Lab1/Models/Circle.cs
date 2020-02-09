@@ -1,10 +1,6 @@
 ﻿using Lab1.Utils;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Lab1.Models
@@ -30,25 +26,25 @@ namespace Lab1.Models
             return new Circle(x, y, rad);
         }
 
-        public Point GetTangentsIntersectionPoint(Circle circle)
-        {
-            var oX = Center.X + (circle.Center.X - Center.X) * Radius / (Radius + circle.Radius);
-            var oY = Center.Y + (circle.Center.Y - Center.Y) * Radius / (Radius + circle.Radius);
-            return new Point(oX, oY);
-        }
-
         public Section GetCommonTangentPoints(Circle circleB, bool side)
         {
             var pointO = GetTangentsIntersectionPoint(circleB);
             var alpha = Math.PI / 2 - Math.Asin(Radius / Center.GetDistanсe(pointO));
             alpha = side ? -1 * alpha : alpha;
-            var pointA1 = GeometryUtils.GetPoint1(this, pointO);
-            var pointB1 = GeometryUtils.GetPoint1(circleB, pointO);
+            var pointA1 = GetClosestToCirclePoint(this, pointO);
+            var pointB1 = GetClosestToCirclePoint(circleB, pointO);
 
             return new Section(
                 PivotPointAroundPoint(-alpha, Center, pointA1), 
                 PivotPointAroundPoint(-alpha, circleB.Center, pointB1)
                 );
+        }
+
+        private Point GetTangentsIntersectionPoint(Circle circle)
+        {
+            var oX = Center.X + (circle.Center.X - Center.X) * Radius / (Radius + circle.Radius);
+            var oY = Center.Y + (circle.Center.Y - Center.Y) * Radius / (Radius + circle.Radius);
+            return new Point(oX, oY);
         }
 
         private Point PivotPointAroundPoint(double alpha, Point center, Point point)
@@ -57,6 +53,15 @@ namespace Lab1.Models
                 Convert.ToInt32((point.X - center.X) * Math.Cos(alpha) - (point.Y - center.Y) * Math.Sin(alpha) + center.X),
                 Convert.ToInt32((point.X - center.X) * Math.Sin(alpha) + (point.Y - center.Y) * Math.Cos(alpha) + center.Y)
             );
+        }
+
+        private Point GetClosestToCirclePoint(Circle circle, Point o)
+        {
+            var a = circle.Center;
+            var length = a.GetDistanсe(o);
+            var aX1 = a.X + Convert.ToInt32((o.X - a.X) * (circle.Radius / length));
+            var aY1 = a.Y + Convert.ToInt32((o.Y - a.Y) * (circle.Radius / length));
+            return new Point(aX1, aY1);
         }
     }
 }
